@@ -5,6 +5,13 @@
         {{ __('Kama namba :phone imesajiliwa, tumeituma nambari ya tarakimu 6 kwa WhatsApp. Inadumu dakika :min.', ['phone' => \App\Support\Phone::display($phone), 'min' => config('family.otp.ttl_minutes')]) }}
     </p>
 
+    @if (! empty($demoCode))
+        <div class="mt-6 rounded-2xl border border-gold-200 bg-gold-50 p-4 text-center">
+            <p class="text-sm font-bold text-gold-700">{{ __('DEMO: nambari ambayo ingetumwa kwa WhatsApp ni') }}</p>
+            <p class="mt-1 font-display text-4xl tracking-[0.3em] text-forest-900 tabular">{{ $demoCode }}</p>
+        </div>
+    @endif
+
     <form x-data="otpInput" x-ref="form" method="POST" action="{{ route('verify.check') }}" class="mt-8 space-y-5">
         @csrf
         <label for="code" class="field-label">{{ __('Nambari ya uthibitisho') }}</label>

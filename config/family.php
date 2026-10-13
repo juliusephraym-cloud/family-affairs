@@ -10,7 +10,9 @@ return [
     'messaging' => [
         // nextsms | fake (fake is refused outside local/testing)
         'driver' => env('FA_MESSAGING_DRIVER', 'fake'),
-        'fake_allowed_envs' => ['local', 'testing'],
+        // The public demo (APP_ENV=demo + FA_DEMO_MODE=true) also uses the fake
+        // provider; a real family install (APP_ENV=production) never can.
+        'fake_allowed_envs' => array_merge(['local', 'testing'], env('FA_DEMO_MODE', false) ? ['demo'] : []),
         'retry_backoff_minutes' => [5, 30, 120],
         'max_attempts' => 4,
         // Broadcasts larger than this need a second leader's approval
@@ -49,4 +51,7 @@ return [
     ],
 
     'locales' => ['sw', 'en'],
+
+    // Public demo: codes shown on screen, uploads disabled, data reset nightly.
+    'demo_mode' => (bool) env('FA_DEMO_MODE', false),
 ];

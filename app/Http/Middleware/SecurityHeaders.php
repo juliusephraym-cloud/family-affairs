@@ -17,7 +17,7 @@ class SecurityHeaders
         $h->set('Referrer-Policy', 'same-origin');
         $h->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
         $h->set('X-Robots-Tag', 'noindex, nofollow');
-        if (app()->environment('production')) {
+        if (! app()->environment('local', 'testing')) {
             $h->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
             // No third-party origins at all: fonts, scripts and images are self-hosted.
             // 'unsafe-eval' is required by Alpine.js expressions; inline <script> stays blocked.

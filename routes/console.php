@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schedule;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /*
@@ -26,6 +27,8 @@ Schedule::call(fn () => Cache::forever('scheduler:heartbeat', now()->toIso8601St
 Schedule::command('fa:notifications-dispatch')->everyMinute()->withoutOverlapping(5);
 Schedule::command('fa:reminders-run')->everyFiveMinutes()->withoutOverlapping(10);
 Schedule::command('fa:prune')->dailyAt('03:15');
+// Public demo: start every day from the same fictional data set.
+Schedule::command('fa:demo-reset --force')->dailyAt('03:00')->when(fn () => (bool) config('family.demo_mode'));
 // Fallback worker for hosts without a supervised `queue:work` process.
 Schedule::command('queue:work --stop-when-empty --max-time=50 --tries=1')->everyMinute()->withoutOverlapping(2)->when(fn () => (bool) config('family.queue_from_scheduler'));
 
@@ -96,3 +99,20 @@ Artisan::command('fa:import-minutes {path} {--date=}', function (string $path) {
     $meeting->minutes()->create(['status' => 'draft', 'opening_notes' => "[IMEINGIZWA KUTOKA KWENYE HATI — INAHITAJI UKAGUZI]\n\n".implode("\n", $lines)]);
     $this->info("Draft meeting #{$meeting->id} created: {$title}. Review it under Vikao before submitting for approval.");
 })->purpose('Import a minutes .docx as an unapproved draft');
+
+Artisan::command('fa:demo-reset {--force}', function () {
+    if (! config('family.demo_mode') && ! app()->environment('local')) {
+        $this->error('Only available in demo mode.');
+
+        return 1;
+    }
+    if (! $this->option('force') && ! $this->confirm('Wipe ALL data and reload the demo?')) {
+        return 1;
+    }
+    Storage::disk('private')->deleteDirectory('albums');
+    Storage::disk('private')->deleteDirectory('members');
+    Storage::disk('private')->deleteDirectory('receipts');
+    $this->call('migrate:fresh', ['--seed' => true, '--force' => true]);
+    Cache::flush();
+    $this->info('Demo data reloaded.');
+})->purpose('Public demo: wipe and reload the fictional data set');

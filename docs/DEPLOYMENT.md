@@ -81,3 +81,11 @@ Restore the **same** `APP_KEY` as when the backup was made — encrypted columns
 - Consent is recorded before any WhatsApp message (`whatsapp_opt_in_at`); members can opt out per category or entirely.
 - Members can request correction or deletion from their profile; requests go to the Secretary's action list and are audited. Financial records are retained per the family's policy.
 - Leadership should designate who acts as data controller contact and agree a retention period for photos and financial records; record that decision in the minutes.
+
+## Public demo instance
+
+A separate instance runs at `https://family-affairs.168.231.115.143.sslip.io` (free sslip.io name pointing at the VPS IP):
+`/var/www/family-affairs-demo`, data in `/var/lib/family-affairs-demo`, database `family_affairs_demo`, nginx `sites-available/family-affairs-demo` (certbot-managed).
+Its `.env` has `APP_ENV=demo`, `FA_DEMO_MODE=true`, `FA_MESSAGING_DRIVER=fake`, `FA_QUEUE_FROM_SCHEDULER=true` and relaxed OTP limits (many visitors share one number).
+Demo mode shows the code on screen, blocks uploads and reloads the fictional data at 03:00 (`fa:demo-reset`). Update it with:
+`APP_DIR=/var/www/family-affairs-demo DATA_DIR=/var/lib/family-affairs-demo bash /tmp/fa-deploy.sh /tmp/<package>.tar.gz`.

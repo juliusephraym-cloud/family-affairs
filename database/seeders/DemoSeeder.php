@@ -16,6 +16,7 @@ use App\Models\Meeting;
 use App\Models\MeetingAttendance;
 use App\Models\Member;
 use App\Models\MembershipStatusHistory;
+use App\Models\NotificationTemplate;
 use App\Models\PaymentSubmission;
 use App\Models\Poll;
 use App\Models\Role;
@@ -61,6 +62,13 @@ class DemoSeeder extends Seeder
         $this->events();
         $this->community();
         $this->memories();
+
+        // Public demo: let the composer and reminders work against the fake provider.
+        if (config('family.demo_mode')) {
+            foreach (NotificationTemplate::all() as $t) {
+                $t->update(['provider_template' => 'demo_'.$t->key, 'provider_approval' => 'approved']);
+            }
+        }
     }
 
     private function people(): void

@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             NotificationSeeder::class,
         ]);
 
-        if (app()->environment('local')) {
+        if (app()->environment('local') || config('family.demo_mode')) {
             $this->call(DemoSeeder::class);
         }
     }

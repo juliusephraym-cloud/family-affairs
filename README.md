@@ -2,6 +2,19 @@
 
 A private, Swahili-first digital home for the Family Affairs association: member directory, transparent treasury (double-entry ledger), contributions and payment verification, meetings and minutes, constitution and rules, events and committees, welfare/bereavement and charity, Secreto, family memories, announcements and polls, and WhatsApp OTP sign-in and reminders through NextSMS.
 
+## 🌍 Live demo
+
+**https://family-affairs.168.231.115.143.sslip.io**
+
+Sign in with one of these numbers — the verification code is shown on screen (no WhatsApp is sent in the demo). Data resets every night; file uploads are disabled.
+
+| Number | Role |
+|---|---|
+| 0700 000 001 | Chairperson + system admin (sees everything) |
+| 0700 000 003 | Secretary |
+| 0700 000 005 | Treasurer |
+| 0700 000 009 | Ordinary member (in arrears) |
+
 > Demo data uses **fictional names** and the unallocated +255 700 number range. No real family names, phone numbers, account numbers or balances are in this repository.
 
 ## Quick start (local)

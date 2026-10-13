@@ -1,6 +1,7 @@
 <?php
 
 use App\Exceptions\DomainRuleException;
+use App\Http\Middleware\DemoGuard;
 use App\Http\Middleware\EnsureActiveMember;
 use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\SetLocale;
@@ -16,7 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->web(append: [SetLocale::class, SecurityHeaders::class]);
+        $middleware->web(append: [SetLocale::class, SecurityHeaders::class, DemoGuard::class]);
         $middleware->alias(['member' => EnsureActiveMember::class]);
         $middleware->validateCsrfTokens(except: ['webhooks/nextsms']);
         $middleware->redirectGuestsTo(fn () => route('login'));

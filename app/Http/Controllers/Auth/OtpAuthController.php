@@ -67,7 +67,14 @@ class OtpAuthController extends Controller
             return redirect()->route('login');
         }
 
-        return view('auth.verify', ['phone' => $otp['phone'], 'wait' => $this->otp->secondsUntilResend($otp['phone'])]);
+        // Public demo only: show the code the fake provider "sent", so visitors can sign in.
+        $demoCode = null;
+        if (config('family.demo_mode')) {
+            $row = DB::table('dev_outbox')->where('to', $otp['phone'])->latest('id')->first();
+            $demoCode = $row ? data_get(json_decode($row->payload, true), 'button.personalisation.copy_otp_code.parameters.0') : null;
+        }
+
+        return view('auth.verify', ['phone' => $otp['phone'], 'wait' => $this->otp->secondsUntilResend($otp['phone']), 'demoCode' => $demoCode]);
     }
 
     public function verify(Request $request): RedirectResponse

@@ -8,8 +8,10 @@ STAMP="$(date +%Y%m%d-%H%M%S)"
 OUT="$HOME/Documents/family-affairs-deploy-$STAMP.tar.gz"
 [ -f deploy/deploy.conf ] && source deploy/deploy.conf
 
+[ "${SKIP_TESTS:-}" = 1 ] || {
 echo "▶ Running tests"
 php artisan test --compact
+}
 
 echo "▶ Building assets"
 npm ci --silent && npm run build
@@ -20,7 +22,7 @@ mkdir -p "$BUILD"
 COPYFILE_DISABLE=1 tar --exclude '._*' --exclude '.git' --exclude 'node_modules' --exclude 'vendor' --exclude '.env' \
   --exclude 'storage/app/private/*' --exclude 'storage/logs/*' --exclude 'storage/framework/*/*' --exclude 'tests' \
   --exclude '.phpunit.cache' --exclude 'public/hot' --exclude 'deploy/deploy.conf' -cf - . | tar -xf - -C "$BUILD"
-(cd "$BUILD" && composer install --no-dev --optimize-autoloader --no-interaction --quiet)
+(cd "$BUILD" && composer install --no-dev --optimize-autoloader --no-interaction --no-scripts --quiet && rm -f bootstrap/cache/*.php)
 
 # Hygiene: no demo data, no secrets, no family records in the package.
 grep -rqE "NEXTSMS_TOKEN=.+[A-Za-z0-9]" "$BUILD/.env.example" && { echo "✗ .env.example contains a token"; exit 1; }
