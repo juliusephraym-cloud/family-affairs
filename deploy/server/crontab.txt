@@ -1,0 +1,4 @@
+# crontab -u www-data -e
+* * * * * cd /var/www/family-affairs/current && php8.3 artisan schedule:run >> /dev/null 2>&1
+# crontab -e   (root)
+30 2 * * * bash /var/www/family-affairs/current/deploy/server/fa-backup.sh >> /var/lib/family-affairs/backups/backup.log 2>&1

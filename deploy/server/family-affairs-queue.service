@@ -1,0 +1,17 @@
+# /etc/systemd/system/family-affairs-queue.service
+[Unit]
+Description=Family Affairs queue worker (WhatsApp sends)
+After=network.target mariadb.service
+
+[Service]
+User=www-data
+Group=www-data
+Restart=always
+RestartSec=5
+WorkingDirectory=/var/www/family-affairs/current
+ExecStart=/usr/bin/php8.3 artisan queue:work --sleep=3 --tries=1 --max-time=3600 --memory=192
+StandardOutput=append:/var/lib/family-affairs/storage/logs/queue.log
+StandardError=append:/var/lib/family-affairs/storage/logs/queue.log
+
+[Install]
+WantedBy=multi-user.target

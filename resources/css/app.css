@@ -1,0 +1,163 @@
+@import '@fontsource-variable/fraunces/opsz.css';
+@import '@fontsource/atkinson-hyperlegible/latin-400.css';
+@import '@fontsource/atkinson-hyperlegible/latin-700.css';
+@import '@fontsource/atkinson-hyperlegible/latin-400-italic.css';
+@import 'tailwindcss';
+
+@source '../views';
+@source '../../app/View';
+
+/*
+ * Family Affairs design tokens — "the family album".
+ * Ivory paper, forest green ink, warm gold leaf, terracotta for warmth & alerts.
+ * Body text is Atkinson Hyperlegible (designed for low-vision readers),
+ * headings are Fraunces (a warm, soft "old-style" serif).
+ */
+@theme {
+    --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
+    --font-sans: 'Atkinson Hyperlegible', 'Segoe UI', system-ui, sans-serif;
+
+    --color-paper: #fffdf8;
+    --color-ivory: #fbf7ef;
+    --color-cream: #f3ebdd;
+    --color-sand: #e7dcc8;
+
+    --color-forest-50: #f1f6f2;
+    --color-forest-100: #e1ede4;
+    --color-forest-200: #c2dbc9;
+    --color-forest-300: #93bfa1;
+    --color-forest-500: #4a8a67;
+    --color-forest-600: #2f6e4e;
+    --color-forest-700: #23573d;
+    --color-forest-800: #1b4430;
+    --color-forest-900: #143222;
+    --color-forest-950: #0d2217;
+
+    --color-gold-50: #fcf7e8;
+    --color-gold-100: #f7edd0;
+    --color-gold-200: #efdca6;
+    --color-gold-400: #ddb65a;
+    --color-gold-500: #c99a2e;
+    --color-gold-600: #a97d1e;
+    --color-gold-700: #845f14;
+
+    --color-clay-50: #fbf1ec;
+    --color-clay-100: #f6e3dc;
+    --color-clay-200: #edc3b5;
+    --color-clay-500: #c0674d;
+    --color-clay-600: #a9513a;
+    --color-clay-700: #8a3f2b;
+
+    --color-ink: #1f1d1a;
+    --color-ink-soft: #3b3833;
+    --color-muted: #6b665d;
+    --color-line: #e4dccd;
+
+    --radius-card: 1.25rem;
+    --shadow-card: 0 1px 0 rgb(31 29 26 / 0.04), 0 8px 24px -12px rgb(20 50 34 / 0.18);
+    --shadow-lift: 0 2px 0 rgb(31 29 26 / 0.04), 0 18px 40px -18px rgb(20 50 34 / 0.35);
+
+    --animate-rise: rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+
+@layer base {
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+        @apply bg-ivory font-sans text-ink antialiased;
+        font-size: 1.0625rem;
+        line-height: 1.6;
+    }
+    h1, h2, h3, .font-display {
+        font-family: var(--font-display);
+        font-variation-settings: 'SOFT' 50, 'WONK' 0;
+        letter-spacing: -0.01em;
+    }
+    :focus-visible { outline: 3px solid var(--color-gold-500); outline-offset: 2px; border-radius: 6px; }
+    [x-cloak] { display: none !important; }
+    ::selection { background: var(--color-gold-200); }
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+}
+
+@layer components {
+    /* Paper grain behind the app — a near-invisible texture, never a pattern you notice. */
+    .paper {
+        background-color: var(--color-ivory);
+        background-image:
+            radial-gradient(circle at 12% 0%, rgb(201 154 46 / 0.07), transparent 40%),
+            radial-gradient(circle at 100% 30%, rgb(47 110 78 / 0.06), transparent 45%);
+    }
+
+    /* Kanga-inspired border band: a thin repeating diamond motif in gold & clay. */
+    .kanga-band {
+        height: 10px;
+        background:
+            linear-gradient(135deg, transparent 37%, var(--color-gold-500) 37% 50%, transparent 50%) 0 0 / 12px 10px,
+            linear-gradient(45deg, transparent 37%, var(--color-clay-500) 37% 50%, transparent 50%) 6px 0 / 12px 10px,
+            var(--color-forest-800);
+        opacity: 0.9;
+    }
+
+    .card {
+        @apply rounded-[var(--radius-card)] border border-line bg-paper;
+        box-shadow: var(--shadow-card);
+    }
+    .card-pad { @apply p-5 sm:p-6; }
+    .card-title { @apply font-display text-lg font-semibold text-forest-900; }
+    .eyebrow { @apply text-xs font-bold tracking-[0.14em] text-gold-700 uppercase; }
+
+    .btn {
+        @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-[0.97rem] font-bold transition
+               disabled:cursor-not-allowed disabled:opacity-50;
+    }
+    .btn-primary { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-[0.97rem] font-bold transition disabled:cursor-not-allowed disabled:opacity-50 bg-forest-800 text-ivory shadow-sm hover:bg-forest-700 active:bg-forest-900; }
+    .btn-gold { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-[0.97rem] font-bold transition disabled:cursor-not-allowed disabled:opacity-50 bg-gold-500 text-forest-950 hover:bg-gold-400; }
+    .btn-ghost { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-[0.97rem] font-bold transition disabled:cursor-not-allowed disabled:opacity-50 border border-line bg-paper text-forest-900 hover:border-forest-300 hover:bg-forest-50; }
+    .btn-danger { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-[0.97rem] font-bold transition disabled:cursor-not-allowed disabled:opacity-50 border border-clay-200 bg-clay-50 text-clay-700 hover:bg-clay-100; }
+    .btn-sm { @apply min-h-9 px-3.5 py-1.5 text-sm; }
+
+    .field-label { @apply mb-1.5 block text-sm font-bold text-ink-soft; }
+    .field-hint { @apply mt-1 text-sm text-muted; }
+    .field-error { @apply mt-1 text-sm font-bold text-clay-700; }
+    .input {
+        @apply block min-h-11 w-full rounded-xl border border-sand bg-white px-3.5 py-2.5 text-[1rem] text-ink
+               placeholder:text-muted/70 focus:border-forest-500 focus:ring-4 focus:ring-forest-100 focus:outline-none;
+    }
+    textarea.input { @apply min-h-28; }
+    select.input { @apply pr-9; }
+
+    .badge { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold whitespace-nowrap; }
+    .badge-green { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold whitespace-nowrap bg-forest-100 text-forest-800; }
+    .badge-gold { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold whitespace-nowrap bg-gold-100 text-gold-700; }
+    .badge-clay { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold whitespace-nowrap bg-clay-100 text-clay-700; }
+    .badge-grey { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold whitespace-nowrap bg-cream text-ink-soft; }
+
+    .table-wrap { @apply -mx-5 overflow-x-auto sm:mx-0; }
+    .table { @apply w-full min-w-[36rem] text-left text-[0.95rem]; }
+    .table th { @apply border-b border-line px-3 py-2.5 text-xs font-bold tracking-wider text-muted uppercase; }
+    .table td { @apply border-b border-line/70 px-3 py-3 align-top; }
+    .table tr:last-child td { @apply border-b-0; }
+    .num { font-variant-numeric: tabular-nums; @apply text-right whitespace-nowrap; }
+
+    .nav-link { @apply flex items-center gap-3 rounded-xl px-3 py-2.5 font-bold text-forest-100/85 transition hover:bg-white/8 hover:text-white; }
+    .nav-link[aria-current='page'] { @apply bg-white/12 text-white; box-shadow: inset 3px 0 0 var(--color-gold-400); }
+
+    .stat { @apply font-display text-2xl font-semibold text-forest-900 tabular-nums break-words 2xl:text-3xl; }
+
+    .prose-family p { @apply mb-3; }
+    .prose-family h2 { @apply mt-6 mb-2 text-xl font-semibold text-forest-900; }
+    .prose-family h3 { @apply mt-4 mb-1 text-lg font-semibold text-forest-900; }
+    .prose-family ul { @apply mb-3 list-disc pl-6; }
+    .prose-family ol { @apply mb-3 list-decimal pl-6; }
+
+    .tab { @apply rounded-full px-4 py-2 text-sm font-bold text-muted hover:text-forest-800; }
+    .tab-active { @apply bg-forest-800 text-ivory hover:text-ivory; }
+}
+
+@utility tabular { font-variant-numeric: tabular-nums; }

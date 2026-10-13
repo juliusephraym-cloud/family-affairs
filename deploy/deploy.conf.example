@@ -1,0 +1,7 @@
+# Copy to deploy/deploy.conf (git-ignored) and fill in real values.
+DOMAIN=""                       # e.g. the family's domain once chosen
+SSH_TARGET=""                   # e.g. root@<vps-ip>
+APP_DIR="/var/www/family-affairs"
+DATA_DIR="/var/lib/family-affairs"   # .env, storage, backups live here — outside releases
+PHP_BIN="php8.3"
+PHP_FPM_SOCK="/run/php/php8.3-fpm.sock"
